@@ -1,59 +1,60 @@
-import React, { Component } from 'react'
+import React, {useState} from 'react'
+import {useNavigate, useLocation} from 'react-router-dom'
+import { useContextCrud } from '../context/ContactsCrudContext';
 
-export class EditContact extends Component {
-    constructor(props){
-     super(props)
-    const {id, name, email} = props.location.state.contact;
-    this.state = {
-        id,
-        name,
-        email
-    }
-    }
+export const EditContact=()=>{
+  const location = useLocation()
+  const {id, name, email} = location.state.contact
+  const [newName, setNewName] = useState(name);
+  const [newEmail, setNewEmail] = useState(email);
+  const {updateContact} = useContextCrud();
+  const navigate = useNavigate()
     
- onChangeName = (e)=>{
- this.setState({
-    name: e.target.value
- })
+ const onChangeName = (e)=>{
+  setNewName(e.target.value)
  }
 
- onChangeEmail = (e)=>{
-this.setState({
-    email: e.target.value
-})
+ const onChangeEmail = (e)=>{
+ setNewEmail(e.target.value)
  }
 
- editContact = (e)=>{
+const editContact = (e)=>{
     e.preventDefault();
-    if(this.state.name === '' || this.state.email ===''){
+    if(newName === '' || newEmail ===''){
      return 
     }
-      this.props.updateContact(this.state);
-      this.setState({
-        name: '',
-        email:''
-     })
-     this.props.history.push('/')
+    updateContact({id, name:newName, email:newEmail})
+      setNewName("")
+      setNewEmail("")
+      navigate('/')
  }
 
-  render() {
+
     return (
       <div className='ui main' style ={{marginTop:'50px'}}>
         <h2>Edit Contact</h2>
         <form className='ui form'>
                 <div className='field'>
                     <label>Name</label>
-                    <input type='text' id='name' value={this.state.name} placeholder='Name' onChange = {this.onChangeName} />
+                    <input type='text' 
+                    id='name' value={newName} 
+                    placeholder='Name' 
+                    onChange = {onChangeName} />
                 </div>
                 <div className='field'>
                     <label>Email</label>
-                    <input type='text' id='email' value={this.state.email} placeholder='Email' onChange = {this.onChangeEmail} />
+                    <input type='text' 
+                    id='email' value={newEmail} 
+                    placeholder='Email' 
+                    onChange = {onChangeEmail} />
                 </div>
-                <button className='ui button blue' type='Submit' onClick = {this.editContact}>Edit</button>
+                <button className='ui button blue' 
+                type='Submit' 
+                onClick = {editContact}>Edit</button>
         </form>
       </div>
     )
-  }
-}
+    }
+
 
 export default EditContact

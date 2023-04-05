@@ -1,21 +1,22 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {Link} from 'react-router-dom'
 import ContactCard from './ContactCard';
+import {useContextCrud} from '../context/ContactsCrudContext'
 
 const ContactList = (props)=>{
-   const deleteItem = (id)=>{
-    props.removeContact(id)
-   }  
-  const renderList = props.contacts.map((contact)=>{
+  const {contacts, retriveContacts, searchKeyHandler, searchTerm , searchResult} = useContextCrud()
+    
+  const renderList = (searchTerm.length < 1 ? contacts : searchResult).map((contact)=>{
    return (
    <ContactCard contact = {contact} 
-    removeItem ={deleteItem} 
     key={contact.id}/>
     )
    });
-
+   useEffect(()=>{
+    retriveContacts();
+   }, [])
  const changeHandler = (e)=>{
-   props.searchKey(e.target.value)
+   searchKeyHandler(e.target.value)
  }
  return(<div className='ui celled list' style={{marginTop : '65px'}}>
    <div>
@@ -27,7 +28,7 @@ const ContactList = (props)=>{
     <div className="ui search">
       <div className="ui input icon">
    <input type="text" placeholder='search contact' 
-   value={props.searchTerm} 
+   value={searchTerm} 
    onChange={changeHandler} />
    <i className="search icon"></i>
       </div>

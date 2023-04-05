@@ -1,7 +1,10 @@
 import React from 'react';
+import {useLocation} from 'react-router-dom'
 import user from '../images/user.jpg'
 
 const ContactDetails = ()=>{
+const location = useLocation()
+const {name, email} = location.state.contact;
 return (
     <div className = 'main' style={{marginTop :'80px'}}>
         <div className='ui card centered'>
@@ -10,8 +13,10 @@ return (
             </div>
             <div className='content'>
                 <div className='header'>
+                    {name}
                 </div>
                 <div className='description'>
+                    {email}
                 </div>
             </div>
         </div>

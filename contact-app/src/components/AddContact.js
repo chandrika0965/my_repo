@@ -1,56 +1,59 @@
-import React, { Component } from 'react'
+import React,{useState} from 'react'
+import { useContextCrud } from '../context/ContactsCrudContext'
+import {useNavigate} from 'react-router-dom'
 
-export class AddContact extends Component {
-    constructor(props){
-     super(props)
-     this.state = {
-        name: '',
-        email:'',
-     }
-    }
- onChangeName = (e)=>{
- this.setState({
-    name: e.target.value
- })
+export const AddContact = ()=> {
+   const [name, setName ] = useState("");
+   const [email, setEmail] = useState("");
+   const {passContacts} = useContextCrud();
+   const navigate = useNavigate()
+  
+ const onChangeName = (e)=>{
+  setName(e.target.value)
  }
 
- onChangeEmail = (e)=>{
-this.setState({
-    email: e.target.value
-})
+ const onChangeEmail = (e)=>{
+  setEmail(e.target.value)
  }
 
- submitContact = (e)=>{
+ const submitContact = (e)=>{
     e.preventDefault();
-    if(this.state.name === '' || this.state.email ===''){
+    if(name === '' || email ===''){
+      alert("Enter the fields")
      return 
     }
-      this.props.passContact(this.state);
-      this.setState({
-        name: '',
-        email:''
-     })
-     this.props.history.push('/')
+    passContacts({name, email});
+    setName("");
+    setEmail("")
+    navigate("/")
  }
 
-  render() {
+  
     return (
       <div className='ui main' style ={{marginTop:'50px'}}>
         <h2>Add Contact</h2>
         <form className='ui form'>
                 <div className='field'>
                     <label>Name</label>
-                    <input type='text' id='name' value={this.state.name} placeholder='Name' onChange = {this.onChangeName} />
+                    <input type='text' 
+                    id='name' value={name} 
+                    placeholder='Name' 
+                    onChange = {onChangeName} />
                 </div>
                 <div className='field'>
                     <label>Email</label>
-                    <input type='text' id='email' value={this.state.email} placeholder='Email' onChange = {this.onChangeEmail} />
+                    <input type='text' 
+                    id='email' value={email} 
+                    placeholder='Email' 
+                    onChange = {onChangeEmail} />
                 </div>
-                <button className='ui button blue' type='Submit' onClick = {this.submitContact}>Submit</button>
+                <button className='ui button blue' 
+                type='Submit' 
+                onClick = {submitContact}>Submit</button>
         </form>
       </div>
     )
-  }
+  
 }
 
 export default AddContact
