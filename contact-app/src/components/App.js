@@ -7,6 +7,7 @@ import ContactList from './ContactList';
 import ContactDetails from './ContactDetails';
 import EditContact from './EditContact';
 import {ContactCrudContextProvider} from '../context/ContactsCrudContext'
+import RegistrationForm from './RegistrationForm';
 
 function App() {
 
@@ -28,6 +29,8 @@ function App() {
           <Route path='/edit'
           element = {<EditContact />}
           />
+          <Route path="/form" 
+          element ={<RegistrationForm/>}/>
         </Routes >
         </ContactCrudContextProvider>
       </Router>
